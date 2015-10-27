@@ -1,0 +1,13 @@
+﻿Build started 27/10/2015 19:37:33.
+     1>Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Common" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Debug/" /Fd".\Debug/vc120.pdb" /FR".\Debug\\" /Gd /TP /analyze- /errorReport:prompt AgentFollower.cpp AgentLeader.cpp
+         AgentLeader.cpp
+         AgentFollower.cpp
+     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\agentfollower.cpp(6): error C2512: 'Vehicle' : no appropriate default constructor available
+         Generating Code...
+     1>Done Building Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.57
