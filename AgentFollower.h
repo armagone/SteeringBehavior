@@ -5,9 +5,14 @@
 
 class AgentFollower : public Vehicle
 {
+private:
+
+	//the steering behavior class
+	SteeringBehavior*     m_pSteering;
+
+
 public:
-	int index;
-	int indexLeader;
+	Vehicle* m_pAgentToFollow;
 	AgentFollower(GameWorld* world,
 		Vector2D position,
 		double    rotation,

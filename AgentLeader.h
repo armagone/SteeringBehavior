@@ -4,9 +4,17 @@
 
 class AgentLeader : public Vehicle
 {
+
+private:
+		//the steering behavior class
+	SteeringBehavior*     m_pSteering;
+	
+
+
+
 public:
 
-	int indexLeader;
+	Vehicle* m_pAgentToFollow;
 	AgentLeader(GameWorld* world,
 		Vector2D position,
 		double    rotation,
@@ -16,7 +24,7 @@ public:
 		double    max_speed,
 		double    max_turn_rate,
 		double    scale,
-		int		 index);
+		Vehicle*		 agentSuivi);
 	~AgentLeader();
 };
 

@@ -14,7 +14,7 @@ using std::list;
 //----------------------------- ctor -------------------------------------
 //------------------------------------------------------------------------
 Vehicle::Vehicle(GameWorld* world, Vector2D position, double rotation, Vector2D velocity, double mass, double max_force, double max_speed, double max_turn_rate, double scale,
-	int index) :
+	Vehicle* agentSuivi) :
 MovingEntity(position,scale,velocity,max_speed,Vector2D(sin(rotation), -cos(rotation)),mass,Vector2D(scale, scale),max_turn_rate,max_force)
 	,m_pWorld(world),m_vSmoothedHeading(Vector2D(0, 0)),m_bSmoothingOn(false),m_dTimeElapsed(0.0)
 
@@ -28,11 +28,7 @@ MovingEntity(position,scale,velocity,max_speed,Vector2D(sin(rotation), -cos(rota
 	//set up the smoother
 	m_pHeadingSmoother = new Smoother<Vector2D>(Prm.NumSamplesForSmoothing, Vector2D(0.0, 0.0));
 
-
-
-	
-	m_pIndexToFollow = index;
-	//m_pLeaderIndex = lindex;
+	m_pAgentToFollow = agentSuivi;
 
 }
 
@@ -60,16 +56,21 @@ void Vehicle::Update(double time_elapsed, std::vector<Vehicle*> m_Vehicles)
 
 
 	Vector2D SteeringForce;
-
+	/*****************************************************************************************************************************************/
+	//																	MODIF debut
+	/*****************************************************************************************************************************************/
 	//get the position from the previous agent
-	if (m_pIndexToFollow != 0){
-		SteeringForce = m_Vehicles[m_pIndexToFollow-1]->m_vPos;
+	if (m_pAgentToFollow == NULL){
+		SteeringForce.x = 2;
+		SteeringForce.y = 2;
 	}
-	else {
-		// TODO Agent leader
-		SteeringForce = m_pSteering->Calculate();
+	else{
+		SteeringForce = m_pAgentToFollow->m_vPos;
 	}
 	
+	/*****************************************************************************************************************************************/
+	//																	MODIF fin
+	/*****************************************************************************************************************************************/
 
 	//Acceleration = Force/Mass
 	Vector2D acceleration = SteeringForce / m_dMass;

@@ -52,10 +52,10 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	//																	AGENTS debut
 	/*****************************************************************************************************************************************/
-	std::vector<AgentFollower*> leaders(Prm.NumLeaders);
-	std::vector<AgentLeader*> followers(Prm.NumAgents);
+	//std::vector<AgentLeader*> leaders(Prm.NumLeaders);
+	//std::vector<AgentFollower*> followers(Prm.NumAgents);
 
-	//setup the followers 
+	//setup the leaders 
 	for (int a = 0; a < Prm.NumLeaders; ++a)
 	{
 		//determine a random starting position
@@ -72,9 +72,9 @@ m_bShowCellSpaceInfo(false)
 			Prm.MaxSpeed * 80 / 100,  //max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
 			Prm.VehicleScale * 4,     //scale
-			a);						  //index
+			NULL);						  //index
 
-		leaders.push_back(&pLeader);
+		//leaders.push_back(pLeader);
 		pLeader->Steering()->FlockingOn();
 
 		m_Vehicles.push_back(pLeader);
@@ -99,7 +99,7 @@ m_bShowCellSpaceInfo(false)
 				Prm.MaxSpeed,             //max velocity
 				Prm.MaxTurnRatePerSecond, //max turn rate
 				Prm.VehicleScale,        //scale
-				i );					  //index de l'agent a suivre a suivre
+				pLeader );					  //index de l'agent a suivre a suivre
 
 			pFollower->Steering()->FlockingOn();
 

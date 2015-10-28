@@ -64,11 +64,8 @@ private:
 	Vehicle& operator=(const Vehicle&);
 
 
-	// index of the agent
-	int m_pIndexToFollow;
+	Vehicle* m_pAgentToFollow;
 
-	// index of its leader
-	int m_pLeaderIndex;
 
 public:
 
@@ -81,7 +78,7 @@ public:
 		double    max_speed,
 		double    max_turn_rate,
 		double    scale,
-		int		 index);
+		Vehicle*		 agentSuivi);
 
 	~Vehicle();
 
