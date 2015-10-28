@@ -2,6 +2,7 @@
 
 #include "Vehicle.h"
 #include "MovingEntity.h"
+#include "AgentLeader.h"
 
 class AgentFollower : public Vehicle
 {
@@ -9,10 +10,11 @@ private:
 
 	//the steering behavior class
 	SteeringBehavior*     m_pSteering;
-
+	AgentLeader* m_pAgentToFollow;
+	Vector2D m_posToGoTo;
 
 public:
-	Vehicle* m_pAgentToFollow;
+	
 	AgentFollower(GameWorld* world,
 		Vector2D position,
 		double    rotation,
@@ -24,6 +26,13 @@ public:
 		double    scale,
 		Vehicle*		 agentSuivi);
 	~AgentFollower();
+
+	void        Update(double time_elapsed, std::vector<AgentFollower*> m_AgentFollowers);
+
+
+
+
+
 };
 
 

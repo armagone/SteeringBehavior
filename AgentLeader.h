@@ -14,7 +14,8 @@ private:
 
 public:
 
-	Vehicle* m_pAgentToFollow;
+	Vector2D m_vPos;
+
 	AgentLeader(GameWorld* world,
 		Vector2D position,
 		double    rotation,
@@ -26,5 +27,7 @@ public:
 		double    scale,
 		Vehicle*		 agentSuivi);
 	~AgentLeader();
+
+	void        Update(double time_elapsed, std::vector<AgentLeader*> m_AgentLeaders);
 };
 

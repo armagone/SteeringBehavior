@@ -48,7 +48,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ReferencePath>E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Common;$(ReferencePath)</ReferencePath>
+    <ReferencePath>.\Common;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -75,7 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -145,6 +145,11 @@
   <ItemGroup>
     <ClCompile Include="AgentFollower.cpp" />
     <ClCompile Include="AgentLeader.cpp" />
+    <ClCompile Include="Common\2D\Vector2d.cpp" />
+    <ClCompile Include="Common\misc\Cgdi.cpp" />
+    <ClCompile Include="Common\misc\iniFileLoaderBase.cpp" />
+    <ClCompile Include="Common\misc\WindowUtils.cpp" />
+    <ClCompile Include="Common\Time\PrecisionTimer.cpp" />
     <ClCompile Include="GameWorld.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -199,6 +204,20 @@
     <ClInclude Include="AgentLeader.h" />
     <ClInclude Include="BaseGameEntity.h" />
     <ClInclude Include="..\Common\misc\CellSpacePartition.h" />
+    <ClInclude Include="Common\2D\C2DMatrix.h" />
+    <ClInclude Include="Common\2D\geometry.h" />
+    <ClInclude Include="Common\2D\InvertedAABBox2D.h" />
+    <ClInclude Include="Common\2D\Transformations.h" />
+    <ClInclude Include="Common\2D\Vector2D.h" />
+    <ClInclude Include="Common\2D\Wall2D.h" />
+    <ClInclude Include="Common\misc\CellSpacePartition.h" />
+    <ClInclude Include="Common\misc\Cgdi.h" />
+    <ClInclude Include="Common\misc\iniFileLoaderBase.h" />
+    <ClInclude Include="Common\misc\Smoother.h" />
+    <ClInclude Include="Common\misc\Stream_Utility_Functions.h" />
+    <ClInclude Include="Common\misc\utils.h" />
+    <ClInclude Include="Common\misc\WindowUtils.h" />
+    <ClInclude Include="Common\Time\PrecisionTimer.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="MovingEntity.h" />

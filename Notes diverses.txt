@@ -1,0 +1,15 @@
+___________________________________________________________________________________
+Dans SteerindBehaviors.cpp
+
+ligne 112 166 et 120
+
+weighted average = ligne
+prioritized = V
+dithered = cercle 
+
+
+On veut que ca correspondent
+
+weighted average = ligne
+prioritized = V
+dithered = cercle 

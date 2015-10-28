@@ -28,9 +28,7 @@ class Vehicle : public MovingEntity
 
 private:
 
-	//a pointer to the world data. So a vehicle can access any obstacle,
-	//path, wall or agent data
-	GameWorld*            m_pWorld;
+	
 
 	//the steering behavior class
 	SteeringBehavior*     m_pSteering;
@@ -63,12 +61,26 @@ private:
 	Vehicle(const Vehicle&);
 	Vehicle& operator=(const Vehicle&);
 
+	/*****************************************************************************************************************************************/
+	//																	MODIF debut
+	/*****************************************************************************************************************************************/
 
 	Vehicle* m_pAgentToFollow;
 
-
+	Vector2D m_posToGoTo;
+	/*****************************************************************************************************************************************/
+	//																	MODIF fin
+	/*****************************************************************************************************************************************/
 public:
-
+	/*****************************************************************************************************************************************/
+	//																	MODIF debut
+	/*****************************************************************************************************************************************/
+	
+	//a pointer to the world data. So a vehicle can access any obstacle,
+	//path, wall or agent data
+	GameWorld*            m_pWorld;
+	
+	
 	Vehicle(GameWorld* world,
 		Vector2D position,
 		double    rotation,
@@ -79,7 +91,9 @@ public:
 		double    max_turn_rate,
 		double    scale,
 		Vehicle*		 agentSuivi);
-
+	/*****************************************************************************************************************************************/
+	//																	MODIF fin
+	/*****************************************************************************************************************************************/
 	~Vehicle();
 
 	//updates the vehicle's position and orientation
