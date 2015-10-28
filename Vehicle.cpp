@@ -55,58 +55,67 @@ void Vehicle::Update(double time_elapsed, std::vector<Vehicle*> m_Vehicles)
 	Vector2D OldPos = Pos();
 
 
-	Vector2D SteeringForce;
+	Vector2D positionToGoTo;
 	/*****************************************************************************************************************************************/
 	//																	MODIF debut
 	/*****************************************************************************************************************************************/
 	//get the position from the previous agent
 	if (m_pAgentToFollow == NULL){
-		SteeringForce.x = 2;
-		SteeringForce.y = 2;
+		positionToGoTo.x = 3;
+		positionToGoTo.y = 3;
 	}
 	else{
-		SteeringForce = m_pAgentToFollow->m_vPos;
+		positionToGoTo = m_pAgentToFollow->m_vPos;
 	}
 	
+	/*TODO*/
+	/*Recup position
+	Deplacer vers position*/
+	
+
+
 	/*****************************************************************************************************************************************/
 	//																	MODIF fin
 	/*****************************************************************************************************************************************/
 
-	//Acceleration = Force/Mass
-	Vector2D acceleration = SteeringForce / m_dMass;
+	////Acceleration = Force/Mass
+	//Vector2D acceleration = SteeringForce / m_dMass;
 
-	//update velocity
-	m_vVelocity += acceleration * time_elapsed;
+	////update velocity
+	//m_vVelocity += acceleration * time_elapsed;
 
-	//make sure vehicle does not exceed maximum velocity
-	m_vVelocity.Truncate(m_dMaxSpeed);
+	////make sure vehicle does not exceed maximum velocity
+	//m_vVelocity.Truncate(m_dMaxSpeed);
 
-	//update the position
-	m_vPos += m_vVelocity * time_elapsed;
+	////update the position
+	//m_vPos += m_vVelocity * time_elapsed;
 
-	//update the heading if the vehicle has a non zero velocity
-	if (m_vVelocity.LengthSq() > 0.00000001)
-	{
-		m_vHeading = Vec2DNormalize(m_vVelocity);
+	////update the heading if the vehicle has a non zero velocity
+	//if (m_vVelocity.LengthSq() > 0.00000001)
+	//{
+	//	m_vHeading = Vec2DNormalize(m_vVelocity);
 
-		m_vSide = m_vHeading.Perp();
-	}
+	//	m_vSide = m_vHeading.Perp();
+	//}
 
-	//EnforceNonPenetrationConstraint(this, World()->Agents());
+	////EnforceNonPenetrationConstraint(this, World()->Agents());
 
-	//treat the screen as a toroid
-	WrapAround(m_vPos, m_pWorld->cxClient(), m_pWorld->cyClient());
+	////treat the screen as a toroid
+	//WrapAround(m_vPos, m_pWorld->cxClient(), m_pWorld->cyClient());
 
-	//update the vehicle's current cell if space partitioning is turned on
-	if (Steering()->isSpacePartitioningOn())
-	{
-		World()->CellSpace()->UpdateEntity(this, OldPos);
-	}
+	////update the vehicle's current cell if space partitioning is turned on
+	//if (Steering()->isSpacePartitioningOn())
+	//{
+	//	World()->CellSpace()->UpdateEntity(this, OldPos);
+	//}
 
-	if (isSmoothingOn())
-	{
-		m_vSmoothedHeading = m_pHeadingSmoother->Update(Heading());
-	}
+	//if (isSmoothingOn())
+	//{
+	//	m_vSmoothedHeading = m_pHeadingSmoother->Update(Heading());
+	//}
+
+
+
 }
 
 

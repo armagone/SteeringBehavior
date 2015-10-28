@@ -52,8 +52,7 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	//																	AGENTS debut
 	/*****************************************************************************************************************************************/
-	//std::vector<AgentLeader*> leaders(Prm.NumLeaders);
-	//std::vector<AgentFollower*> followers(Prm.NumAgents);
+	
 
 	//setup the leaders 
 	for (int a = 0; a < Prm.NumLeaders; ++a)
@@ -69,12 +68,12 @@ m_bShowCellSpaceInfo(false)
 			Vector2D(0, 0),           //velocity
 			Prm.VehicleMass,          //mass
 			Prm.MaxSteeringForce,     //max force
-			Prm.MaxSpeed * 80 / 100,  //max velocity
+			Prm.MaxSpeed *80 / 100,  //max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
-			Prm.VehicleScale * 4,     //scale
+			Prm.VehicleScale *4,     //scale
 			NULL);						  //index
 
-		//leaders.push_back(pLeader);
+		
 		pLeader->Steering()->FlockingOn();
 
 		m_Vehicles.push_back(pLeader);
