@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -13,20 +13,18 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.K.) resources
+// English (United Kingdom) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDR_MENU1 MENU DISCARDABLE 
+IDR_MENU1 MENU
 BEGIN
     POPUP "Objects"
     BEGIN
@@ -38,11 +36,11 @@ BEGIN
         MENUITEM "On/Off",                      IDR_PARTITIONING
         MENUITEM "View Neighbors",              IDM_PARTITION_VIEW_NEIGHBORS
     END
-    POPUP "Calculate Method"
+    POPUP "Formation"
     BEGIN
-        MENUITEM "Weighted Sum",                IDR_WEIGHTED_SUM
-        MENUITEM "Prioritized",                 IDR_PRIORITIZED
-        MENUITEM "Dithered",                    IDR_DITHERED
+        MENUITEM "Line",                        IDR_WEIGHTED_SUM
+        MENUITEM "V",                           IDR_PRIORITIZED
+        MENUITEM "Circle",                      IDR_DITHERED
     END
     POPUP "Info"
     BEGIN
@@ -62,18 +60,18 @@ END
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -81,7 +79,7 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // English (U.K.) resources
+#endif    // English (United Kingdom) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

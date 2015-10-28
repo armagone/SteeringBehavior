@@ -11,7 +11,8 @@
 #include "ParamLoader.h"
 #include "misc/WindowUtils.h"
 #include "misc/Stream_Utility_Functions.h"
-
+#include "AgentFollower.h"
+#include "AgentLeader.h"
 
 #include "resource.h"
 
@@ -48,39 +49,73 @@ m_bShowCellSpaceInfo(false)
 	double border = 30;
 	m_pPath = new Path(5, border, border, cx - border, cy - border, true);
 
-	//setup the agents
-	for (int a = 0; a < Prm.NumAgents; ++a)
-	{
+	/*****************************************************************************************************************************************/
+	//																	AGENTS debut
+	/*****************************************************************************************************************************************/
+	std::vector<AgentFollower*> leaders(Prm.NumLeaders);
+	std::vector<AgentLeader*> followers(Prm.NumAgents);
 
+	//setup the followers 
+	for (int a = 0; a < Prm.NumLeaders; ++a)
+	{
 		//determine a random starting position
 		Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0,
 			cy / 2.0 + RandomClamped()*cy / 2.0);
 
 
-		Vehicle* pVehicle = new Vehicle(this,
+		AgentLeader* pLeader = new AgentLeader(this,
 			SpawnPos,                 //initial position
 			RandFloat()*TwoPi,        //start rotation
 			Vector2D(0, 0),           //velocity
 			Prm.VehicleMass,          //mass
 			Prm.MaxSteeringForce,     //max force
-			Prm.MaxSpeed,             //max velocity
+			Prm.MaxSpeed * 80 / 100,  //max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
-			Prm.VehicleScale,        //scale
+			Prm.VehicleScale * 4,     //scale
 			a);						  //index
 
-		pVehicle->Steering()->FlockingOn();
+		leaders.push_back(&pLeader);
+		pLeader->Steering()->FlockingOn();
 
-		m_Vehicles.push_back(pVehicle);
+		m_Vehicles.push_back(pLeader);
 
 		//add it to the cell subdivision
-		m_pCellSpace->AddEntity(pVehicle);
-	}
+		m_pCellSpace->AddEntity(pLeader);
 
+
+		for (int i = 0; i < Prm.NumAgents/Prm.NumLeaders; ++i)
+		{
+			//determine a random starting position
+			Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0,
+				cy / 2.0 + RandomClamped()*cy / 2.0);
+
+
+			AgentFollower* pFollower = new AgentFollower(this,
+				SpawnPos,                 //initial position
+				RandFloat()*TwoPi,        //start rotation
+				Vector2D(0, 0),           //velocity
+				Prm.VehicleMass,          //mass
+				Prm.MaxSteeringForce,     //max force
+				Prm.MaxSpeed,             //max velocity
+				Prm.MaxTurnRatePerSecond, //max turn rate
+				Prm.VehicleScale,        //scale
+				i );					  //index de l'agent a suivre a suivre
+
+			pFollower->Steering()->FlockingOn();
+
+			m_Vehicles.push_back(pFollower);
+
+			//add it to the cell subdivision
+			m_pCellSpace->AddEntity(pFollower);
+		}
+	}
+	/*****************************************************************************************************************************************/
+	//																	AGENTS fin
+	/*****************************************************************************************************************************************/
 
 #define SHOAL
 #ifdef SHOAL
 	m_Vehicles[Prm.NumAgents - 1]->Steering()->FlockingOff();
-	m_Vehicles[Prm.NumAgents - 1]->SetScale(Vector2D(10, 10));
 	m_Vehicles[Prm.NumAgents - 1]->Steering()->WanderOn();
 	m_Vehicles[Prm.NumAgents - 1]->SetMaxSpeed(70);
 

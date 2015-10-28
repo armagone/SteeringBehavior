@@ -1,13 +1,29 @@
-﻿Build started 27/10/2015 19:37:33.
+﻿Build started 28/10/2015 11:48:59.
      1>Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Common" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Debug/" /Fd".\Debug/vc120.pdb" /FR".\Debug\\" /Gd /TP /analyze- /errorReport:prompt AgentFollower.cpp AgentLeader.cpp
-         AgentLeader.cpp
-         AgentFollower.cpp
-     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\agentfollower.cpp(6): error C2512: 'Vehicle' : no appropriate default constructor available
-         Generating Code...
-     1>Done Building Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" (Build target(s)) -- FAILED.
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Common" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Debug/" /Fd".\Debug/vc120.pdb" /FR".\Debug\\" /Gd /TP /analyze- /errorReport:prompt GameWorld.cpp
+         GameWorld.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug/Steering.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Debug/Steering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug\Steering.lib" /MACHINE:X86 /SAFESEH .\Debug\Script1.res
+         .\Debug/AgentFollower.obj
+         .\Debug/AgentLeader.obj
+         .\Debug/GameWorld.obj
+         .\Debug/main.obj
+         .\Debug/SteeringBehaviors.obj
+         .\Debug/Vehicle.obj
+         .\Debug/Cgdi.obj
+         .\Debug/iniFileLoaderBase.obj
+         .\Debug/Obstacle.obj
+         .\Debug/ParamLoader.obj
+         .\Debug/Path.obj
+         .\Debug/PrecisionTimer.obj
+         .\Debug/Vector2d.obj
+         .\Debug/WindowUtils.obj
+         Steering.vcxproj -> E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\.\Debug\Steering.exe
+       BscMake:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o".\Debug/Steering.bsc" .\Debug\AgentFollower.sbr .\Debug\AgentLeader.sbr .\Debug\GameWorld.sbr .\Debug\main.sbr .\Debug\SteeringBehaviors.sbr .\Debug\Vehicle.sbr .\Debug\Cgdi.sbr .\Debug\iniFileLoaderBase.sbr .\Debug\Obstacle.sbr .\Debug\ParamLoader.sbr .\Debug\Path.sbr .\Debug\PrecisionTimer.sbr .\Debug\Vector2d.sbr .\Debug\WindowUtils.sbr
+     1>Done Building Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:01.57
+Time Elapsed 00:00:03.21
