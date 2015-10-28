@@ -15,8 +15,8 @@ using std::list;
 //------------------------------------------------------------------------
 Vehicle::Vehicle(GameWorld* world, Vector2D position, double rotation, Vector2D velocity, double mass, double max_force, double max_speed, double max_turn_rate, double scale,
 	Vehicle* agentSuivi) :
-MovingEntity(position,scale,velocity,max_speed,Vector2D(sin(rotation), -cos(rotation)),mass,Vector2D(scale, scale),max_turn_rate,max_force)
-	,m_pWorld(world),m_vSmoothedHeading(Vector2D(0, 0)),m_bSmoothingOn(false),m_dTimeElapsed(0.0)
+	MovingEntity(position, scale, velocity, max_speed, Vector2D(sin(rotation), -cos(rotation)), mass, Vector2D(scale, scale), max_turn_rate, max_force)
+	, m_pWorld(world), m_vSmoothedHeading(Vector2D(0, 0)), m_bSmoothingOn(false), m_dTimeElapsed(0.0)
 
 {
 
@@ -54,12 +54,12 @@ void Vehicle::Update(double time_elapsed, std::vector<Vehicle*> m_Vehicles)
 	//in this method
 	Vector2D OldPos = Pos();
 
-
 	Vector2D positionToGoTo;
 	/*****************************************************************************************************************************************/
 	//																	MODIF debut
 	/*****************************************************************************************************************************************/
-	//get the position from the previous agent
+
+	/* Get the position from the previous agent */
 	if (m_pAgentToFollow == NULL){
 		positionToGoTo.x = 3;
 		positionToGoTo.y = 3;
@@ -67,55 +67,47 @@ void Vehicle::Update(double time_elapsed, std::vector<Vehicle*> m_Vehicles)
 	else{
 		positionToGoTo = m_pAgentToFollow->m_vPos;
 	}
-	
-	/*TODO*/
-	/*Recup position
-	Deplacer vers position*/
-	
-
 
 	/*****************************************************************************************************************************************/
 	//																	MODIF fin
 	/*****************************************************************************************************************************************/
 
-	////Acceleration = Force/Mass
-	//Vector2D acceleration = SteeringForce / m_dMass;
+	Vector2D SteeringForce = m_pSteering->Calculate();
 
-	////update velocity
-	//m_vVelocity += acceleration * time_elapsed;
+	/* Acceleration = Force/Mass */
+	Vector2D acceleration = SteeringForce / m_dMass;
 
-	////make sure vehicle does not exceed maximum velocity
-	//m_vVelocity.Truncate(m_dMaxSpeed);
+	/* Update velocity */
+	m_vVelocity += acceleration * time_elapsed;
 
-	////update the position
-	//m_vPos += m_vVelocity * time_elapsed;
+	/* Make sure vehicle does not exceed maximum velocity */
+	m_vVelocity.Truncate(m_dMaxSpeed);
 
-	////update the heading if the vehicle has a non zero velocity
-	//if (m_vVelocity.LengthSq() > 0.00000001)
-	//{
-	//	m_vHeading = Vec2DNormalize(m_vVelocity);
+	/* Update the position */
+	m_vPos += m_vVelocity * time_elapsed;
 
-	//	m_vSide = m_vHeading.Perp();
-	//}
+	/* Update the heading if the vehicle has a non zero velocity */
+	if (m_vVelocity.LengthSq() > 0.00000001)
+	{
+		m_vHeading = Vec2DNormalize(m_vVelocity);
+		m_vSide = m_vHeading.Perp();
+	}
 
 	////EnforceNonPenetrationConstraint(this, World()->Agents());
 
-	////treat the screen as a toroid
-	//WrapAround(m_vPos, m_pWorld->cxClient(), m_pWorld->cyClient());
+	/* Treat the screen as a toroid */
+	WrapAround(m_vPos, m_pWorld->cxClient(), m_pWorld->cyClient());
 
-	////update the vehicle's current cell if space partitioning is turned on
-	//if (Steering()->isSpacePartitioningOn())
-	//{
-	//	World()->CellSpace()->UpdateEntity(this, OldPos);
-	//}
+	/* Update the vehicle's current cell if space partitioning is turned on */
+	if (Steering()->isSpacePartitioningOn())
+	{
+		World()->CellSpace()->UpdateEntity(this, OldPos);
+	}
 
-	//if (isSmoothingOn())
-	//{
-	//	m_vSmoothedHeading = m_pHeadingSmoother->Update(Heading());
-	//}
-
-
-
+	if (isSmoothingOn())
+	{
+		m_vSmoothedHeading = m_pHeadingSmoother->Update(Heading());
+	}
 }
 
 

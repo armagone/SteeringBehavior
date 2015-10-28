@@ -52,7 +52,7 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	//																	AGENTS debut
 	/*****************************************************************************************************************************************/
-	
+
 
 	//setup the leaders 
 	for (int a = 0; a < Prm.NumLeaders; ++a)
@@ -68,22 +68,21 @@ m_bShowCellSpaceInfo(false)
 			Vector2D(0, 0),           //velocity
 			Prm.VehicleMass,          //mass
 			Prm.MaxSteeringForce,     //max force
-			Prm.MaxSpeed *80 / 100,  //max velocity
+			Prm.MaxSpeed * 0.80,		//max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
-			Prm.VehicleScale *4,     //scale
+			Prm.VehicleScale * 4.0,     //scale
 			NULL);						  //index
 
-		
-		pLeader->Steering()->WanderOn();
+
+		pLeader->Steering()->FlockingOn();
 
 		m_Vehicles.push_back(pLeader);
-		leaders.push_back(pLeader);
 
 		//add it to the cell subdivision
 		m_pCellSpace->AddEntity(pLeader);
 
 
-		for (int i = 0; i < Prm.NumAgents/Prm.NumLeaders; ++i)
+		for (int i = 0; i < Prm.NumAgents / Prm.NumLeaders; ++i)
 		{
 			//determine a random starting position
 			Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0,
@@ -99,12 +98,11 @@ m_bShowCellSpaceInfo(false)
 				Prm.MaxSpeed,             //max velocity
 				Prm.MaxTurnRatePerSecond, //max turn rate
 				Prm.VehicleScale,        //scale
-				pLeader );					  //index de l'agent a suivre a suivre
+				pLeader);					  //index de l'agent a suivre a suivre
 
-			pFollower->Steering()->SeekOn();
+			pFollower->Steering()->FlockingOn();
 
 			m_Vehicles.push_back(pFollower);
-			followers.push_back(pFollower);
 
 			//add it to the cell subdivision
 			m_pCellSpace->AddEntity(pFollower);
@@ -167,27 +165,11 @@ void GameWorld::Update(double time_elapsed)
 	m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
 
 
-
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	//update the leaders
-	for (unsigned int a = 0; a < followers.size(); ++a)
+	//update the vehicles
+	for (unsigned int a = 0; a < m_Vehicles.size(); ++a)
 	{
-		leaders[a]->Update(time_elapsed, leaders);
+		m_Vehicles[a]->Update(time_elapsed, m_Vehicles);
 	}
-
-
-	//update the followers
-	for (unsigned int a = 0; a < followers.size(); ++a)
-	{
-		followers[a]->Update(time_elapsed, followers);
-	}
-
-
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-
 }
 
 
