@@ -74,9 +74,10 @@ m_bShowCellSpaceInfo(false)
 			NULL);						  //index
 
 		
-		pLeader->Steering()->FlockingOn();
+		pLeader->Steering()->WanderOn();
 
 		m_Vehicles.push_back(pLeader);
+		leaders.push_back(pLeader);
 
 		//add it to the cell subdivision
 		m_pCellSpace->AddEntity(pLeader);
@@ -100,9 +101,10 @@ m_bShowCellSpaceInfo(false)
 				Prm.VehicleScale,        //scale
 				pLeader );					  //index de l'agent a suivre a suivre
 
-			pFollower->Steering()->FlockingOn();
+			pFollower->Steering()->SeekOn();
 
 			m_Vehicles.push_back(pFollower);
+			followers.push_back(pFollower);
 
 			//add it to the cell subdivision
 			m_pCellSpace->AddEntity(pFollower);
@@ -165,11 +167,27 @@ void GameWorld::Update(double time_elapsed)
 	m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
 
 
-	//update the vehicles
-	for (unsigned int a = 0; a < m_Vehicles.size(); ++a)
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//update the leaders
+	for (unsigned int a = 0; a < followers.size(); ++a)
 	{
-		m_Vehicles[a]->Update(time_elapsed, m_Vehicles);
+		leaders[a]->Update(time_elapsed, leaders);
 	}
+
+
+	//update the followers
+	for (unsigned int a = 0; a < followers.size(); ++a)
+	{
+		followers[a]->Update(time_elapsed, followers);
+	}
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
 

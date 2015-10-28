@@ -25,7 +25,7 @@ public:
 		double    max_speed,
 		double    max_turn_rate,
 		double    scale,
-		Vehicle*		 agentSuivi);
+		AgentLeader*		 agentSuivi);
 	~AgentLeader();
 
 	void        Update(double time_elapsed, std::vector<AgentLeader*> m_AgentLeaders);

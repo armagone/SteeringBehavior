@@ -31,7 +31,7 @@ void AgentFollower::Update(double time_elapsed, std::vector<AgentFollower*> m_Ag
 
 	//calculate the combined force from each steering behavior in the 
 	//vehicle's list
-	SteeringForce = m_pSteering->Calculate();
+	SteeringForce = m_pSteering->CalculatePrioritized();
 
 
 	//Acceleration = Force/Mass

@@ -26,7 +26,7 @@ class SteeringBehavior;
 class Vehicle : public MovingEntity
 {
 
-private:
+protected:
 
 	
 
@@ -61,16 +61,7 @@ private:
 	Vehicle(const Vehicle&);
 	Vehicle& operator=(const Vehicle&);
 
-	/*****************************************************************************************************************************************/
-	//																	MODIF debut
-	/*****************************************************************************************************************************************/
-
-	Vehicle* m_pAgentToFollow;
-
-	Vector2D m_posToGoTo;
-	/*****************************************************************************************************************************************/
-	//																	MODIF fin
-	/*****************************************************************************************************************************************/
+	
 public:
 	/*****************************************************************************************************************************************/
 	//																	MODIF debut
@@ -79,7 +70,9 @@ public:
 	//a pointer to the world data. So a vehicle can access any obstacle,
 	//path, wall or agent data
 	GameWorld*            m_pWorld;
-	
+	Vehicle* m_pAgentToFollow;
+
+	Vector2D m_posToGoTo;
 	
 	Vehicle(GameWorld* world,
 		Vector2D position,

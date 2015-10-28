@@ -254,7 +254,6 @@ private:
 
   //calculates and sums the steering forces from any active behaviors
   Vector2D CalculateWeightedSum();
-  Vector2D CalculatePrioritized();
   Vector2D CalculateDithered();
 
   //helper method for Hide. Returns a position located on the other
@@ -268,6 +267,8 @@ private:
   
   
 public:
+
+	Vector2D CalculatePrioritized();
 
   SteeringBehavior(Vehicle* agent);
 

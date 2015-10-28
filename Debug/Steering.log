@@ -1,4 +1,4 @@
-﻿Build started 28/10/2015 15:31:35.
+﻿Build started 28/10/2015 16:35:30.
      1>Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(942,5): warning MSB8027: Two or more files with the name of Vector2d.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are Common\2D\Vector2d.cpp, ..\Common\2D\Vector2d.cpp.
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(942,5): warning MSB8027: Two or more files with the name of Cgdi.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are Common\misc\Cgdi.cpp, ..\Common\misc\Cgdi.cpp.
@@ -6,38 +6,23 @@
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(942,5): warning MSB8027: Two or more files with the name of WindowUtils.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are Common\misc\WindowUtils.cpp, ..\Common\misc\WindowUtils.cpp.
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(942,5): warning MSB8027: Two or more files with the name of PrecisionTimer.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are Common\Time\PrecisionTimer.cpp, ..\Common\Time\PrecisionTimer.cpp.
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\Common /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Debug/" /Fd".\Debug/vc120.pdb" /FR".\Debug\\" /Gd /TP /analyze- /errorReport:prompt Common\misc\iniFileLoaderBase.cpp
-         iniFileLoaderBase.cpp
-     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\common\misc\inifileloaderbase.cpp(9): warning C4305: 'argument' : truncation from 'int' to 'char'
-     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\common\misc\inifileloaderbase.cpp(9): warning C4309: 'argument' : truncation of constant value
-     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\common\misc\inifileloaderbase.cpp(57): warning C4129: ';' : unrecognized character escape sequence
-     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\common\misc\inifileloaderbase.cpp(110): warning C4129: ';' : unrecognized character escape sequence
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug/Steering.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Debug/Steering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug\Steering.lib" /MACHINE:X86 /SAFESEH .\Debug\Script1.res
-         .\Debug/AgentFollower.obj
-         .\Debug/AgentLeader.obj
-         .\Debug/Vector2d.obj
-         .\Debug/Cgdi.obj
-         .\Debug/iniFileLoaderBase.obj
-         .\Debug/WindowUtils.obj
-         .\Debug/PrecisionTimer.obj
-         .\Debug/GameWorld.obj
-         .\Debug/main.obj
-         .\Debug/SteeringBehaviors.obj
-         .\Debug/Vehicle.obj
-         .\Debug/Cgdi.obj
-         .\Debug/iniFileLoaderBase.obj
-         .\Debug/Obstacle.obj
-         .\Debug/ParamLoader.obj
-         .\Debug/Path.obj
-         .\Debug/PrecisionTimer.obj
-         .\Debug/Vector2d.obj
-         .\Debug/WindowUtils.obj
-         Steering.vcxproj -> E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\.\Debug\Steering.exe
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o".\Debug/Steering.bsc" .\Debug\AgentFollower.sbr .\Debug\AgentLeader.sbr .\Debug\Vector2d.sbr .\Debug\Cgdi.sbr .\Debug\iniFileLoaderBase.sbr .\Debug\WindowUtils.sbr .\Debug\PrecisionTimer.sbr .\Debug\GameWorld.sbr .\Debug\main.sbr .\Debug\SteeringBehaviors.sbr .\Debug\Vehicle.sbr .\Debug\Cgdi.sbr .\Debug\iniFileLoaderBase.sbr .\Debug\Obstacle.sbr .\Debug\ParamLoader.sbr .\Debug\Path.sbr .\Debug\PrecisionTimer.sbr .\Debug\Vector2d.sbr .\Debug\WindowUtils.sbr
-     1>Done Building Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\Common /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo".\Debug/" /Fd".\Debug/vc120.pdb" /FR".\Debug\\" /Gd /TP /analyze- /errorReport:prompt AgentFollower.cpp AgentLeader.cpp GameWorld.cpp SteeringBehaviors.cpp Vehicle.cpp main.cpp
+         AgentLeader.cpp
+     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\agentleader.cpp(13): error C2065: 'm_Pos' : undeclared identifier
+     1>e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\agentleader.cpp(45): error C2039: 'm_Pos' : is not a member of 'Vehicle'
+                 e:\cours\gi\uqac\automne\125 ia pour le jv\projets\buckland\sources\buckland_chapter3-steering behaviors\vehicle.h(26) : see declaration of 'Vehicle'
+         Generating Code...
+         Compiling...
+         AgentFollower.cpp
+         Generating Code...
+         Compiling...
+         main.cpp
+         Vehicle.cpp
+         SteeringBehaviors.cpp
+         GameWorld.cpp
+         Generating Code...
+     1>Done Building Project "E:\Cours\GI\UQAC\Automne\125 IA pour le jv\Projets\Buckland\Sources\Buckland_Chapter3-Steering Behaviors\Steering.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:01.16
+Time Elapsed 00:00:05.79

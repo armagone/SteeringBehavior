@@ -21,6 +21,8 @@
 #include "BaseGameEntity.h"
 #include "EntityFunctionTemplates.h"
 #include "vehicle.h"
+#include "AgentFollower.h"
+#include "AgentLeader.h"
 
 
 class Obstacle;
@@ -34,6 +36,14 @@ typedef std::vector<BaseGameEntity*>::iterator  ObIt;
 class GameWorld
 { 
 private:
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+	std::vector<AgentFollower*> followers;
+	std::vector<AgentLeader*> leaders;
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
   //a container of all the moving entities
   std::vector<Vehicle*>         m_Vehicles;
