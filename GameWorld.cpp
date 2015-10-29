@@ -19,6 +19,9 @@
 #include <list>
 using std::list;
 
+#include <string>
+#include <iostream> 
+
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -28,7 +31,7 @@ m_cxClient(cx),
 m_cyClient(cy),
 m_bPaused(false),
 m_vCrosshair(Vector2D(cxClient() / 2.0, cxClient() / 2.0)),
-m_bShowWalls(false),
+m_bShowWalls(true),
 m_bShowObstacles(false),
 m_bShowPath(false),
 m_bShowWanderCircle(false),
@@ -52,6 +55,36 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	//																	AGENTS debut
 	/*****************************************************************************************************************************************/
+	AgentLeader* pLeader;
+
+
+	pLeader = new AgentLeader(this,
+		Vector2D(100,100),                 //initial position
+		RandFloat()*TwoPi,        //start rotation
+		Vector2D(0, 0),           //velocity
+		Prm.VehicleMass,          //mass
+		Prm.MaxSteeringForce,     //max force
+		Prm.MaxSpeed,		//max velocity
+		Prm.MaxTurnRatePerSecond, //max turn rate
+		Prm.VehicleScale * 3.0,     //scale
+		NULL);
+	pLeader->setManualColor(2);
+	m_Vehicles.push_back(pLeader);
+	m_pCellSpace->AddEntity(pLeader);
+
+	m_player = pLeader;
+
+	m_target = new Vehicle(this,
+		pLeader->Pos(),                 //initial position
+		0,        //start rotation
+		Vector2D(0, 0),           //velocity
+		0,          //mass
+		0,     //max force
+		1,		//max velocity
+		0, //max turn rate
+		0,     //scale
+		NULL);						  //index
+	m_Vehicles.push_back(m_target);
 
 
 	//setup the leaders 
@@ -62,34 +95,36 @@ m_bShowCellSpaceInfo(false)
 			cy / 2.0 + RandomClamped()*cy / 2.0);
 
 
-		AgentLeader* pLeader = new AgentLeader(this,
+			pLeader = new AgentLeader(this,
 			SpawnPos,                 //initial position
 			RandFloat()*TwoPi,        //start rotation
 			Vector2D(0, 0),           //velocity
 			Prm.VehicleMass,          //mass
 			Prm.MaxSteeringForce,     //max force
-			Prm.MaxSpeed * 0.80,		//max velocity
+			Prm.MaxSpeed * 0.40,		//max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
 			Prm.VehicleScale * 4.0,     //scale
 			NULL);						  //index
 
-
-		pLeader->Steering()->FlockingOn();
+		pLeader->setManualColor(1);
+		pLeader->Steering()->WanderOn();
 
 		m_Vehicles.push_back(pLeader);
 
 		//add it to the cell subdivision
 		m_pCellSpace->AddEntity(pLeader);
 
+		AgentFollower* pFollower;
+		Vehicle* pTarget = pLeader;
 
-		for (int i = 0; i < Prm.NumAgents / Prm.NumLeaders; ++i)
+		for (int i = 1; i < Prm.NumAgents + 1; ++i)
 		{
 			//determine a random starting position
 			Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0,
 				cy / 2.0 + RandomClamped()*cy / 2.0);
+				
 
-
-			AgentFollower* pFollower = new AgentFollower(this,
+				pFollower = new AgentFollower(this,
 				SpawnPos,                 //initial position
 				RandFloat()*TwoPi,        //start rotation
 				Vector2D(0, 0),           //velocity
@@ -100,7 +135,12 @@ m_bShowCellSpaceInfo(false)
 				Prm.VehicleScale,        //scale
 				pLeader);					  //index de l'agent a suivre a suivre
 
-			pFollower->Steering()->FlockingOn();
+											  //pFollower->Steering()->FlockingOn();
+
+
+
+			pFollower->Steering()->OffsetPursuitOn(pTarget, Vector2D(1, 0));
+			pTarget = pFollower;
 
 			m_Vehicles.push_back(pFollower);
 
@@ -111,7 +151,7 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	//																	AGENTS fin
 	/*****************************************************************************************************************************************/
-
+	/*
 #define SHOAL
 #ifdef SHOAL
 	m_Vehicles[Prm.NumAgents - 1]->Steering()->FlockingOff();
@@ -124,7 +164,7 @@ m_bShowCellSpaceInfo(false)
 		m_Vehicles[i]->Steering()->EvadeOn(m_Vehicles[Prm.NumAgents - 1]);
 
 	}
-#endif
+#endif*/
 
 	//create any obstacles or walls
 	//CreateObstacles();
@@ -163,6 +203,14 @@ void GameWorld::Update(double time_elapsed)
 	static Smoother<double> FrameRateSmoother(SampleRate, 0.0);
 
 	m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
+
+	//TODO : ICI J'ESSAYE DE SET MANUELLEMENT LA FORCE AU JOUEUR HUMAIN
+
+	/*m_target->SetPos(m_player->Pos() + m_directionPlayer);
+	m_player->Steering()->PursuitOn(m_target);*/
+	//m_player->Steering()->SetFixedForce(m_directionPlayer);
+	SetCrosshair(m_player->Pos() + (m_directionPlayer*10));
+	m_player->Steering()->ArriveOn();
 
 
 	//update the vehicles
@@ -344,8 +392,41 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
 		}
 		break;
 
+
+	case 'Z':
+		m_directionPlayer.y = 1;
+		break;
+	case 'S':
+		m_directionPlayer.y = -1;
+		break;
+	case 'Q':
+		m_directionPlayer.x = -1;
+		break;
+	case 'D':
+		m_directionPlayer.x = 1;
+		break;
+
+
+
 	}//end switch
 }
+
+//------------------------- HandleKeyReleased ----------------------------- // touche relachees
+void GameWorld::HandleKeyReleased(WPARAM wParam)
+{
+	switch (wParam)
+	{
+		case 'Z':
+		case 'S':
+			m_directionPlayer.y = 0;
+			break;
+		case 'Q':
+		case 'D':
+			m_directionPlayer.x = 0;
+			break;
+	}//end switch
+}
+
 
 
 

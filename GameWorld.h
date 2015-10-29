@@ -20,7 +20,8 @@
 #include "misc/CellSpacePartition.h"
 #include "BaseGameEntity.h"
 #include "EntityFunctionTemplates.h"
-#include "vehicle.h"
+#include "Vehicle.h"
+#include "AgentLeader.h"
 
 
 class Obstacle;
@@ -60,6 +61,13 @@ private:
 
   //keeps track of the average FPS
   double                         m_dAvFrameTime;
+
+  // direction human player
+  Vector2D                      m_directionPlayer;
+
+
+  AgentLeader* m_player;
+  Vehicle* m_target;
 
 
   //flags to turn aids and obstacles etc on/off
@@ -113,6 +121,7 @@ public:
 
   //handle WM_COMMAND messages
   void        HandleKeyPresses(WPARAM wParam);
+  void        HandleKeyReleased(WPARAM wParam);
   void        HandleMenuItems(WPARAM wParam, HWND hwnd);
   
   void        TogglePause(){m_bPaused = !m_bPaused;}

@@ -135,6 +135,14 @@ LRESULT CALLBACK WindowProc(HWND   hwnd,
 
 	break;
 
+	case WM_KEYDOWN:
+	{
+		g_GameWorld->HandleKeyReleased(wParam);
+
+	}//end WM_KEYUP
+
+	break;
+
 
 	case WM_PAINT:
 	{

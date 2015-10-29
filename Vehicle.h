@@ -61,6 +61,9 @@ private:
 	Vehicle(const Vehicle&);
 	Vehicle& operator=(const Vehicle&);
 
+
+	int  manual_color;
+
 	/*****************************************************************************************************************************************/
 	//																	MODIF debut
 	/*****************************************************************************************************************************************/
@@ -114,7 +117,9 @@ public:
 	void        SmoothingOff(){ m_bSmoothingOn = false; }
 	void        ToggleSmoothing(){ m_bSmoothingOn = !m_bSmoothingOn; }
 
-	double       TimeElapsed()const{ return m_dTimeElapsed; }
+	double      TimeElapsed()const{ return m_dTimeElapsed; }
+	int			getManualColor()const { return manual_color; }
+	void        setManualColor(int color) { manual_color = color; }
 
 };
 

@@ -50,7 +50,7 @@ class SteeringBehavior
 {
 public:
 
-	enum summing_method{ weighted_average, prioritized, dithered };
+	enum summing_method{ weighted_average, prioritized, dithered, manual };
 
 private:
 
@@ -72,7 +72,7 @@ private:
 		interpose = 0x02000,
 		hide = 0x04000,
 		flock = 0x08000,
-		offset_pursuit = 0x10000,
+		offset_pursuit = 0x10000
 	};
 
 private:
@@ -84,6 +84,9 @@ private:
 	//the steering force created by the combined effect of all
 	//the selected behaviors
 	Vector2D    m_vSteeringForce;
+
+	Vector2D    m_vFixedForce;
+	
 
 	//these can be used to keep track of friends, pursuers, or prey
 	Vehicle*     m_pTargetAgent1;
@@ -305,6 +308,7 @@ public:
 	}
 
 	Vector2D Force()const{ return m_vSteeringForce; }
+	void      SetFixedForce(const Vector2D force) { m_vFixedForce = force; }
 
 	void      ToggleSpacePartitioningOnOff(){ m_bCellSpaceOn = !m_bCellSpaceOn; }
 	bool      isSpacePartitioningOn()const{ return m_bCellSpaceOn; }

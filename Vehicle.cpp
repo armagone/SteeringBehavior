@@ -141,6 +141,11 @@ void Vehicle::Render()
 		gdi->GreenPen();
 	}
 
+	if (Steering()->isWanderOn())
+	{
+		gdi->RedPen();
+	}
+
 	if (isSmoothingOn())
 	{
 		m_vecVehicleVBTrans = WorldTransform(m_vecVehicleVB,
@@ -158,6 +163,9 @@ void Vehicle::Render()
 			Side(),
 			Scale());
 	}
+
+	if(getManualColor() == 1) gdi->RedPen();
+	else if (getManualColor() == 2) gdi->GreenPen();
 
 
 	gdi->ClosedShape(m_vecVehicleVBTrans);

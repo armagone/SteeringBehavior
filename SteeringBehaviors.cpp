@@ -126,6 +126,9 @@ Vector2D SteeringBehavior::Calculate()
 
 	}//end switch
 
+	/*if (!isNaN(m_vFixedForce)) {
+		m_vSteeringForce = m_vFixedForce;
+	}*/
 	return m_vSteeringForce;
 }
 
