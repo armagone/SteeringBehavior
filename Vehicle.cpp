@@ -141,11 +141,6 @@ void Vehicle::Render()
 		gdi->GreenPen();
 	}
 
-	if (Steering()->isWanderOn())
-	{
-		gdi->RedPen();
-	}
-
 	if (isSmoothingOn())
 	{
 		m_vecVehicleVBTrans = WorldTransform(m_vecVehicleVB,

@@ -38,6 +38,8 @@ private:
 
   //a container of all the moving entities
   std::vector<Vehicle*>         m_Vehicles;
+  std::vector<Vehicle*>         m_leaders;
+  std::vector<Vehicle*>         m_followers;
 
   //any obstacles
   std::vector<BaseGameEntity*>  m_Obstacles;
@@ -66,7 +68,7 @@ private:
   Vector2D                      m_directionPlayer;
 
 
-  AgentLeader* m_player;
+  Vehicle* m_player;
   Vehicle* m_target;
 
 
@@ -150,6 +152,9 @@ public:
   
   void  ToggleViewKeys(){m_bViewKeys = !m_bViewKeys;}
   bool  ViewKeys()const{return m_bViewKeys;}
+
+
+  void StartLeaderFollowing();
 
 };
 

@@ -31,7 +31,7 @@ m_cxClient(cx),
 m_cyClient(cy),
 m_bPaused(false),
 m_vCrosshair(Vector2D(cxClient() / 2.0, cxClient() / 2.0)),
-m_bShowWalls(true),
+m_bShowWalls(false),
 m_bShowObstacles(false),
 m_bShowPath(false),
 m_bShowWanderCircle(false),
@@ -57,7 +57,7 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	AgentLeader* pLeader;
 
-
+	// Ajout du player au début à la case 0 du tableau. Ne pas déplacer sinon StartLeaderFollowing() sera décalé.
 	pLeader = new AgentLeader(this,
 		Vector2D(100,100),                 //initial position
 		RandFloat()*TwoPi,        //start rotation
@@ -69,22 +69,9 @@ m_bShowCellSpaceInfo(false)
 		Prm.VehicleScale * 3.0,     //scale
 		NULL);
 	pLeader->setManualColor(2);
-	m_Vehicles.push_back(pLeader);
 	m_pCellSpace->AddEntity(pLeader);
 
 	m_player = pLeader;
-
-	m_target = new Vehicle(this,
-		pLeader->Pos(),                 //initial position
-		0,        //start rotation
-		Vector2D(0, 0),           //velocity
-		0,          //mass
-		0,     //max force
-		1,		//max velocity
-		0, //max turn rate
-		0,     //scale
-		NULL);						  //index
-	m_Vehicles.push_back(m_target);
 
 
 	//setup the leaders 
@@ -101,7 +88,7 @@ m_bShowCellSpaceInfo(false)
 			Vector2D(0, 0),           //velocity
 			Prm.VehicleMass,          //mass
 			Prm.MaxSteeringForce,     //max force
-			Prm.MaxSpeed * 0.40,		//max velocity
+			Prm.MaxSpeed * 0.80,		//max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
 			Prm.VehicleScale * 4.0,     //scale
 			NULL);						  //index
@@ -110,6 +97,7 @@ m_bShowCellSpaceInfo(false)
 		pLeader->Steering()->WanderOn();
 
 		m_Vehicles.push_back(pLeader);
+		m_leaders.push_back(pLeader);
 
 		//add it to the cell subdivision
 		m_pCellSpace->AddEntity(pLeader);
@@ -117,7 +105,9 @@ m_bShowCellSpaceInfo(false)
 		AgentFollower* pFollower;
 		Vehicle* pTarget = pLeader;
 
-		for (int i = 1; i < Prm.NumAgents + 1; ++i)
+		int nbAgentPerLeader = Prm.NumAgents / Prm.NumLeaders;
+
+		for (int i = 0; i < nbAgentPerLeader; ++i)
 		{
 			//determine a random starting position
 			Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0,
@@ -133,21 +123,23 @@ m_bShowCellSpaceInfo(false)
 				Prm.MaxSpeed,             //max velocity
 				Prm.MaxTurnRatePerSecond, //max turn rate
 				Prm.VehicleScale,        //scale
-				pLeader);					  //index de l'agent a suivre a suivre
+				pLeader);					  //index de l'agent a suivre
 
-											  //pFollower->Steering()->FlockingOn();
-
-
-
-			pFollower->Steering()->OffsetPursuitOn(pTarget, Vector2D(1, 0));
-			pTarget = pFollower;
+			pFollower->Steering()->FlockingOn();
 
 			m_Vehicles.push_back(pFollower);
+			m_followers.push_back(pFollower);
 
 			//add it to the cell subdivision
 			m_pCellSpace->AddEntity(pFollower);
 		}
 	}
+	
+	m_Vehicles.push_back(m_player);
+
+	StartLeaderFollowing();
+
+
 	/*****************************************************************************************************************************************/
 	//																	AGENTS fin
 	/*****************************************************************************************************************************************/
@@ -169,6 +161,30 @@ m_bShowCellSpaceInfo(false)
 	//create any obstacles or walls
 	//CreateObstacles();
 	//CreateWalls();
+}
+
+void GameWorld::StartLeaderFollowing()
+{
+	Vehicle* pLeader;
+	Vehicle* pFollower;
+
+	int nbAgentPerLeader = Prm.NumAgents / Prm.NumLeaders;
+
+	for (int a = 0; a < Prm.NumLeaders; ++a)
+	{
+		pLeader = m_leaders[a];
+		pLeader->Steering()->WanderOn();
+
+		for (int i = 0; i < nbAgentPerLeader; ++i)
+		{
+			int id = i + (nbAgentPerLeader * a);
+			pFollower = m_followers[id];
+			pFollower->Steering()->FlockingOff();
+			pFollower->Steering()->OffsetPursuitOn(pLeader, Vector2D(2, 2));
+			pLeader = pFollower;
+		}
+	}
+
 }
 
 
@@ -209,7 +225,7 @@ void GameWorld::Update(double time_elapsed)
 	/*m_target->SetPos(m_player->Pos() + m_directionPlayer);
 	m_player->Steering()->PursuitOn(m_target);*/
 	//m_player->Steering()->SetFixedForce(m_directionPlayer);
-	SetCrosshair(m_player->Pos() + (m_directionPlayer*10));
+	SetCrosshair(m_player->Pos() + (m_directionPlayer*100));
 	m_player->Steering()->ArriveOn();
 
 
