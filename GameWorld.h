@@ -20,8 +20,7 @@
 #include "misc/CellSpacePartition.h"
 #include "BaseGameEntity.h"
 #include "EntityFunctionTemplates.h"
-#include "vehicle.h"
-#include "AgentFollower.h"
+#include "Vehicle.h"
 #include "AgentLeader.h"
 
 
@@ -37,16 +36,10 @@ class GameWorld
 { 
 private:
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-	std::vector<AgentFollower*> followers;
-	std::vector<AgentLeader*> leaders;
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
   //a container of all the moving entities
   std::vector<Vehicle*>         m_Vehicles;
+  std::vector<Vehicle*>         m_leaders;
+  std::vector<Vehicle*>         m_followers;
 
   //any obstacles
   std::vector<BaseGameEntity*>  m_Obstacles;
@@ -70,6 +63,13 @@ private:
 
   //keeps track of the average FPS
   double                         m_dAvFrameTime;
+
+  // direction human player
+  Vector2D                      m_directionPlayer;
+
+
+  Vehicle* m_player;
+  Vehicle* m_target;
 
 
   //flags to turn aids and obstacles etc on/off
@@ -123,6 +123,7 @@ public:
 
   //handle WM_COMMAND messages
   void        HandleKeyPresses(WPARAM wParam);
+  void        HandleKeyReleased(WPARAM wParam);
   void        HandleMenuItems(WPARAM wParam, HWND hwnd);
   
   void        TogglePause(){m_bPaused = !m_bPaused;}
@@ -151,6 +152,9 @@ public:
   
   void  ToggleViewKeys(){m_bViewKeys = !m_bViewKeys;}
   bool  ViewKeys()const{return m_bViewKeys;}
+
+
+  void StartLeaderFollowing();
 
 };
 

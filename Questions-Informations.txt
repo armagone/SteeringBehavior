@@ -1,0 +1,22 @@
+
+
+Questions :
+
+Fonctionnalité :
+- Déplacement avec les touches ZQSD de l'agent Vert
+- Les agents en rouge sont les leaders
+- Les agents en bleu sont les followers
+
+- Comportement en file / à la queue-leu-leu derrière le leader (mieux visible en activant les murs dans l'interface)
+
+
+Question 3 :
+Si on introduit un deuxième agent leader, le groupe des 20 followers se tranforme en deux groupes de 10 agents, chacun suivant un des leaders.
+On a donc deux files d'agents qui se promènent à l'écran.
+
+Question 4 :
+En ajoutant un leader humain, dans le cas de la file, on va avoir un troisième groupe qui va suivre notre personnage en file.
+Si on passe en comportement de flocking, on va pouvoir essayer de récupérer des agents d'un autre groupe en s'approchant d'eux.
+En effet, comme ils suivent le comportement de leur voisinage, si l'on s'approche trop d'eux, il peuvent choisir de s'aligner sur notre groupe plutôt que sur leur ancien groupe.
+
+Dans le cas de deux agents qui se croisent, leurs groupes vont s'échanger des membres aléatoirement, en fonction des forces et des distances entre chaque agent.

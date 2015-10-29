@@ -14,7 +14,7 @@ private:
 	Vector2D m_posToGoTo;
 
 public:
-	
+
 	AgentFollower(GameWorld* world,
 		Vector2D position,
 		double    rotation,

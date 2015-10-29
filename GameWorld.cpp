@@ -19,6 +19,9 @@
 #include <list>
 using std::list;
 
+#include <string>
+#include <iostream> 
+
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -52,7 +55,24 @@ m_bShowCellSpaceInfo(false)
 	/*****************************************************************************************************************************************/
 	//																	AGENTS debut
 	/*****************************************************************************************************************************************/
-	
+	AgentLeader* pLeader;
+
+	// Ajout du player au début à la case 0 du tableau. Ne pas déplacer sinon StartLeaderFollowing() sera décalé.
+	pLeader = new AgentLeader(this,
+		Vector2D(100,100),                 //initial position
+		RandFloat()*TwoPi,        //start rotation
+		Vector2D(0, 0),           //velocity
+		Prm.VehicleMass,          //mass
+		Prm.MaxSteeringForce,     //max force
+		Prm.MaxSpeed,		//max velocity
+		Prm.MaxTurnRatePerSecond, //max turn rate
+		Prm.VehicleScale * 3.0,     //scale
+		NULL);
+	pLeader->setManualColor(2);
+	m_pCellSpace->AddEntity(pLeader);
+
+	m_player = pLeader;
+
 
 	//setup the leaders 
 	for (int a = 0; a < Prm.NumLeaders; ++a)
@@ -62,35 +82,39 @@ m_bShowCellSpaceInfo(false)
 			cy / 2.0 + RandomClamped()*cy / 2.0);
 
 
-		AgentLeader* pLeader = new AgentLeader(this,
+			pLeader = new AgentLeader(this,
 			SpawnPos,                 //initial position
 			RandFloat()*TwoPi,        //start rotation
 			Vector2D(0, 0),           //velocity
 			Prm.VehicleMass,          //mass
 			Prm.MaxSteeringForce,     //max force
-			Prm.MaxSpeed *80 / 100,  //max velocity
+			Prm.MaxSpeed * 0.80,		//max velocity
 			Prm.MaxTurnRatePerSecond, //max turn rate
-			Prm.VehicleScale *4,     //scale
+			Prm.VehicleScale * 4.0,     //scale
 			NULL);						  //index
 
-		
+		pLeader->setManualColor(1);
 		pLeader->Steering()->WanderOn();
 
 		m_Vehicles.push_back(pLeader);
-		leaders.push_back(pLeader);
+		m_leaders.push_back(pLeader);
 
 		//add it to the cell subdivision
 		m_pCellSpace->AddEntity(pLeader);
 
+		AgentFollower* pFollower;
+		Vehicle* pTarget = pLeader;
 
-		for (int i = 0; i < Prm.NumAgents/Prm.NumLeaders; ++i)
+		int nbAgentPerLeader = Prm.NumAgents / Prm.NumLeaders;
+
+		for (int i = 0; i < nbAgentPerLeader; ++i)
 		{
 			//determine a random starting position
 			Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0,
 				cy / 2.0 + RandomClamped()*cy / 2.0);
+				
 
-
-			AgentFollower* pFollower = new AgentFollower(this,
+				pFollower = new AgentFollower(this,
 				SpawnPos,                 //initial position
 				RandFloat()*TwoPi,        //start rotation
 				Vector2D(0, 0),           //velocity
@@ -99,21 +123,27 @@ m_bShowCellSpaceInfo(false)
 				Prm.MaxSpeed,             //max velocity
 				Prm.MaxTurnRatePerSecond, //max turn rate
 				Prm.VehicleScale,        //scale
-				pLeader );					  //index de l'agent a suivre a suivre
+				pLeader);					  //index de l'agent a suivre
 
-			pFollower->Steering()->SeekOn();
+			pFollower->Steering()->FlockingOn();
 
 			m_Vehicles.push_back(pFollower);
-			followers.push_back(pFollower);
+			m_followers.push_back(pFollower);
 
 			//add it to the cell subdivision
 			m_pCellSpace->AddEntity(pFollower);
 		}
 	}
+	
+	m_Vehicles.push_back(m_player);
+
+	StartLeaderFollowing();
+
+
 	/*****************************************************************************************************************************************/
 	//																	AGENTS fin
 	/*****************************************************************************************************************************************/
-
+	/*
 #define SHOAL
 #ifdef SHOAL
 	m_Vehicles[Prm.NumAgents - 1]->Steering()->FlockingOff();
@@ -126,11 +156,35 @@ m_bShowCellSpaceInfo(false)
 		m_Vehicles[i]->Steering()->EvadeOn(m_Vehicles[Prm.NumAgents - 1]);
 
 	}
-#endif
+#endif*/
 
 	//create any obstacles or walls
 	//CreateObstacles();
 	//CreateWalls();
+}
+
+void GameWorld::StartLeaderFollowing()
+{
+	Vehicle* pLeader;
+	Vehicle* pFollower;
+
+	int nbAgentPerLeader = Prm.NumAgents / Prm.NumLeaders;
+
+	for (int a = 0; a < Prm.NumLeaders; ++a)
+	{
+		pLeader = m_leaders[a];
+		pLeader->Steering()->WanderOn();
+
+		for (int i = 0; i < nbAgentPerLeader; ++i)
+		{
+			int id = i + (nbAgentPerLeader * a);
+			pFollower = m_followers[id];
+			pFollower->Steering()->FlockingOff();
+			pFollower->Steering()->OffsetPursuitOn(pLeader, Vector2D(2, 2));
+			pLeader = pFollower;
+		}
+	}
+
 }
 
 
@@ -166,28 +220,20 @@ void GameWorld::Update(double time_elapsed)
 
 	m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
 
+	//TODO : ICI J'ESSAYE DE SET MANUELLEMENT LA FORCE AU JOUEUR HUMAIN
+
+	/*m_target->SetPos(m_player->Pos() + m_directionPlayer);
+	m_player->Steering()->PursuitOn(m_target);*/
+	//m_player->Steering()->SetFixedForce(m_directionPlayer);
+	SetCrosshair(m_player->Pos() + (m_directionPlayer*100));
+	m_player->Steering()->ArriveOn();
 
 
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	//update the leaders
-	for (unsigned int a = 0; a < followers.size(); ++a)
+	//update the vehicles
+	for (unsigned int a = 0; a < m_Vehicles.size(); ++a)
 	{
-		leaders[a]->Update(time_elapsed, leaders);
+		m_Vehicles[a]->Update(time_elapsed, m_Vehicles);
 	}
-
-
-	//update the followers
-	for (unsigned int a = 0; a < followers.size(); ++a)
-	{
-		followers[a]->Update(time_elapsed, followers);
-	}
-
-
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-
 }
 
 
@@ -362,8 +408,41 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
 		}
 		break;
 
+
+	case 'Z':
+		m_directionPlayer.y = 1;
+		break;
+	case 'S':
+		m_directionPlayer.y = -1;
+		break;
+	case 'Q':
+		m_directionPlayer.x = -1;
+		break;
+	case 'D':
+		m_directionPlayer.x = 1;
+		break;
+
+
+
 	}//end switch
 }
+
+//------------------------- HandleKeyReleased ----------------------------- // touche relachees
+void GameWorld::HandleKeyReleased(WPARAM wParam)
+{
+	switch (wParam)
+	{
+		case 'Z':
+		case 'S':
+			m_directionPlayer.y = 0;
+			break;
+		case 'Q':
+		case 'D':
+			m_directionPlayer.x = 0;
+			break;
+	}//end switch
+}
+
 
 
 
