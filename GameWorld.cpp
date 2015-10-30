@@ -224,14 +224,22 @@ void GameWorld::Update(double time_elapsed)
 
 	m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
 
+	/*****************************************************************************************************************************************/
+	//																	modif fin
+	/*****************************************************************************************************************************************/
+
 	//TODO : ICI J'ESSAYE DE SET MANUELLEMENT LA FORCE AU JOUEUR HUMAIN
 
 	/*m_target->SetPos(m_player->Pos() + m_directionPlayer);
 	m_player->Steering()->PursuitOn(m_target);*/
 	//m_player->Steering()->SetFixedForce(m_directionPlayer);
-	SetCrosshair(m_player->Pos() + (m_directionPlayer*100));
+	Vector2D temp = m_player->Pos() + (m_directionPlayer * 100);
+	SetCrosshair(temp);
 	m_player->Steering()->ArriveOn();
 
+	/*****************************************************************************************************************************************/
+	//																	modif fin
+	/*****************************************************************************************************************************************/
 
 	//update the vehicles
 	for (unsigned int a = 0; a < m_Vehicles.size(); ++a)
@@ -413,13 +421,13 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
 		break;
 
 
-	case 'Z':
-		m_directionPlayer.y = 1;
-		break;
-	case 'S':
+	case 'W':
 		m_directionPlayer.y = -1;
 		break;
-	case 'Q':
+	case 'S':
+		m_directionPlayer.y = 1;
+		break;
+	case 'A':
 		m_directionPlayer.x = -1;
 		break;
 	case 'D':
@@ -436,13 +444,17 @@ void GameWorld::HandleKeyReleased(WPARAM wParam)
 {
 	switch (wParam)
 	{
-		case 'Z':
-		case 'S':
-			m_directionPlayer.y = 0;
+		case 'W':
+			m_directionPlayer.x -= m_directionPlayer.x;
 			break;
-		case 'Q':
+		case 'S':
+			m_directionPlayer.x -= m_directionPlayer.x;
+			break;
+		case 'A':
+			m_directionPlayer.x -= m_directionPlayer.x;
+			break;
 		case 'D':
-			m_directionPlayer.x = 0;
+			m_directionPlayer.x -= m_directionPlayer.x;
 			break;
 	}//end switch
 }
