@@ -256,9 +256,9 @@ private:
 					   .......................................................*/
 
 	//calculates and sums the steering forces from any active behaviors
-	Vector2D CalculateWeightedSum();
-	Vector2D CalculatePrioritized();
-	Vector2D CalculateDithered();
+	Vector2D CalculateWeightedSum();		/* Lign formation */
+	Vector2D CalculatePrioritized();		/* V formation */
+	Vector2D CalculateDithered();			/* Circle formation */
 
 	//helper method for Hide. Returns a position located on the other
 	//side of an obstacle to the pursuer

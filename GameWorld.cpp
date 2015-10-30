@@ -93,6 +93,8 @@ m_bShowCellSpaceInfo(false)
 			Prm.VehicleScale * 4.0,     //scale
 			NULL);						  //index
 
+		pLeader->SetID(0);
+
 		pLeader->setManualColor(1);
 		pLeader->Steering()->WanderOn();
 
@@ -124,6 +126,8 @@ m_bShowCellSpaceInfo(false)
 				Prm.MaxTurnRatePerSecond, //max turn rate
 				Prm.VehicleScale,        //scale
 				pLeader);					  //index de l'agent a suivre
+
+			pFollower->SetID(i+1);
 
 			pFollower->Steering()->FlockingOn();
 
