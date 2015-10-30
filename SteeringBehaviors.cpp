@@ -127,7 +127,7 @@ Vector2D SteeringBehavior::Calculate()
 	}//end switch
 
 	/*if (!isNaN(m_vFixedForce)) {
-		m_vSteeringForce = m_vFixedForce;
+	m_vSteeringForce = m_vFixedForce;
 	}*/
 	return m_vSteeringForce;
 }
@@ -191,183 +191,15 @@ bool SteeringBehavior::AccumulateForce(Vector2D &RunningTot,
 }
 
 
-
-//---------------------- CalculatePrioritized ----------------------------
-//
-//  this method calls each active steering behavior in order of priority
-//  and acumulates their forces until the max steering force magnitude
-//  is reached, at which time the function returns the steering force 
-//  accumulated to that  point
-//------------------------------------------------------------------------
-Vector2D SteeringBehavior::CalculatePrioritized()
-{
-	Vector2D force;
-
-	if (On(wall_avoidance))
-	{
-		force = WallAvoidance(m_pVehicle->World()->Walls()) *
-			m_dWeightWallAvoidance;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(obstacle_avoidance))
-	{
-		force = ObstacleAvoidance(m_pVehicle->World()->Obstacles()) *
-			m_dWeightObstacleAvoidance;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(evade))
-	{
-		assert(m_pTargetAgent1 && "Evade target not assigned");
-
-		force = Evade(m_pTargetAgent1) * m_dWeightEvade;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
+/*****************************************************************************************************************************************/
+//																	MODIF debut
+/*****************************************************************************************************************************************/
+/* Lign formation */
 
 
-	if (On(flee))
-	{
-		force = Flee(m_pVehicle->World()->Crosshair()) * m_dWeightFlee;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-
-
-	//these next three can be combined for flocking behavior (wander is
-	//also a good behavior to add into this mix)
-	if (!isSpacePartitioningOn())
-	{
-		if (On(separation))
-		{
-			force = Separation(m_pVehicle->World()->Agents()) * m_dWeightSeparation;
-
-			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-		}
-
-		if (On(allignment))
-		{
-			force = Alignment(m_pVehicle->World()->Agents()) * m_dWeightAlignment;
-
-			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-		}
-
-		if (On(cohesion))
-		{
-			force = Cohesion(m_pVehicle->World()->Agents()) * m_dWeightCohesion;
-
-			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-		}
-	}
-
-	else
-	{
-
-		if (On(separation))
-		{
-			force = SeparationPlus(m_pVehicle->World()->Agents()) * m_dWeightSeparation;
-
-			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-		}
-
-		if (On(allignment))
-		{
-			force = AlignmentPlus(m_pVehicle->World()->Agents()) * m_dWeightAlignment;
-
-			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-		}
-
-		if (On(cohesion))
-		{
-			force = CohesionPlus(m_pVehicle->World()->Agents()) * m_dWeightCohesion;
-
-			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-		}
-	}
-
-	if (On(seek))
-	{
-		force = Seek(m_pVehicle->World()->Crosshair()) * m_dWeightSeek;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-
-	if (On(arrive))
-	{
-		force = Arrive(m_pVehicle->World()->Crosshair(), m_Deceleration) * m_dWeightArrive;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(wander))
-	{
-		force = Wander() * m_dWeightWander;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(pursuit))
-	{
-		assert(m_pTargetAgent1 && "pursuit target not assigned");
-
-		force = Pursuit(m_pTargetAgent1) * m_dWeightPursuit;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(offset_pursuit))
-	{
-		assert(m_pTargetAgent1 && "pursuit target not assigned");
-		assert(!m_vOffset.isZero() && "No offset assigned");
-
-		force = OffsetPursuit(m_pTargetAgent1, m_vOffset);
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(interpose))
-	{
-		assert(m_pTargetAgent1 && m_pTargetAgent2 && "Interpose agents not assigned");
-
-		force = Interpose(m_pTargetAgent1, m_pTargetAgent2) * m_dWeightInterpose;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	if (On(hide))
-	{
-		assert(m_pTargetAgent1 && "Hide target not assigned");
-
-		force = Hide(m_pTargetAgent1, m_pVehicle->World()->Obstacles()) * m_dWeightHide;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-
-	if (On(follow_path))
-	{
-		force = FollowPath() * m_dWeightFollowPath;
-
-		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
-	}
-
-	return m_vSteeringForce;
-}
-
-
-//---------------------- CalculateWeightedSum ----------------------------
-//
-//  this simply sums up all the active behaviors X their weights and 
-//  truncates the result to the max available steering force before 
-//  returning
-//------------------------------------------------------------------------
 Vector2D SteeringBehavior::CalculateWeightedSum()
 {
+
 	if (On(wall_avoidance))
 	{
 		m_vSteeringForce += WallAvoidance(m_pVehicle->World()->Walls()) *
@@ -485,208 +317,252 @@ Vector2D SteeringBehavior::CalculateWeightedSum()
 	return m_vSteeringForce;
 }
 
-
-//---------------------- CalculateDithered ----------------------------
-//
-//  this method sums up the active behaviors by assigning a probabilty
-//  of being calculated to each behavior. It then tests the first priority
-//  to see if it should be calcukated this simulation-step. If so, it
-//  calculates the steering force resulting from this behavior. If it is
-//  more than zero it returns the force. If zero, or if the behavior is
-//  skipped it continues onto the next priority, and so on.
-//
-//  NOTE: Not all of the behaviors have been implemented in this method,
-//        just a few, so you get the general idea
-//------------------------------------------------------------------------
-Vector2D SteeringBehavior::CalculateDithered()
+/* V formation */
+Vector2D SteeringBehavior::CalculatePrioritized()
 {
-	//reset the steering force
-	m_vSteeringForce.Zero();
+	Vector2D force;
 
-	if (On(wall_avoidance) && RandFloat() < Prm.prWallAvoidance)
+	if (On(wall_avoidance))
 	{
-		m_vSteeringForce = WallAvoidance(m_pVehicle->World()->Walls()) *
-			m_dWeightWallAvoidance / Prm.prWallAvoidance;
+		force = WallAvoidance(m_pVehicle->World()->Walls()) *
+			m_dWeightWallAvoidance;
 
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-			return m_vSteeringForce;
-		}
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 	}
 
-	if (On(obstacle_avoidance) && RandFloat() < Prm.prObstacleAvoidance)
+	if (On(obstacle_avoidance))
 	{
-		m_vSteeringForce += ObstacleAvoidance(m_pVehicle->World()->Obstacles()) *
-			m_dWeightObstacleAvoidance / Prm.prObstacleAvoidance;
+		force = ObstacleAvoidance(m_pVehicle->World()->Obstacles()) *
+			m_dWeightObstacleAvoidance;
 
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-			return m_vSteeringForce;
-		}
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 	}
 
-	if (!isSpacePartitioningOn())
-	{
-		if (On(separation) && RandFloat() < Prm.prSeparation)
-		{
-			m_vSteeringForce += Separation(m_pVehicle->World()->Agents()) *
-				m_dWeightSeparation / Prm.prSeparation;
-
-			if (!m_vSteeringForce.isZero())
-			{
-				m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-				return m_vSteeringForce;
-			}
-		}
-	}
-
-	else
-	{
-		if (On(separation) && RandFloat() < Prm.prSeparation)
-		{
-			m_vSteeringForce += SeparationPlus(m_pVehicle->World()->Agents()) *
-				m_dWeightSeparation / Prm.prSeparation;
-
-			if (!m_vSteeringForce.isZero())
-			{
-				m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-				return m_vSteeringForce;
-			}
-		}
-	}
-
-
-	if (On(flee) && RandFloat() < Prm.prFlee)
-	{
-		m_vSteeringForce += Flee(m_pVehicle->World()->Crosshair()) * m_dWeightFlee / Prm.prFlee;
-
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-			return m_vSteeringForce;
-		}
-	}
-
-	if (On(evade) && RandFloat() < Prm.prEvade)
+	if (On(evade))
 	{
 		assert(m_pTargetAgent1 && "Evade target not assigned");
 
-		m_vSteeringForce += Evade(m_pTargetAgent1) * m_dWeightEvade / Prm.prEvade;
+		force = Evade(m_pTargetAgent1) * m_dWeightEvade;
 
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-			return m_vSteeringForce;
-		}
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 	}
 
 
+	if (On(flee))
+	{
+		force = Flee(m_pVehicle->World()->Crosshair()) * m_dWeightFlee;
+
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+	}
+
+
+
+	//these next three can be combined for flocking behavior (wander is
+	//also a good behavior to add into this mix)
 	if (!isSpacePartitioningOn())
 	{
-		if (On(allignment) && RandFloat() < Prm.prAlignment)
+		if (On(separation))
 		{
-			m_vSteeringForce += Alignment(m_pVehicle->World()->Agents()) *
-				m_dWeightAlignment / Prm.prAlignment;
+			force = Separation(m_pVehicle->World()->Agents()) * m_dWeightSeparation;
 
-			if (!m_vSteeringForce.isZero())
-			{
-				m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-				return m_vSteeringForce;
-			}
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 		}
 
-		if (On(cohesion) && RandFloat() < Prm.prCohesion)
+		if (On(allignment))
 		{
-			m_vSteeringForce += Cohesion(m_pVehicle->World()->Agents()) *
-				m_dWeightCohesion / Prm.prCohesion;
+			force = Alignment(m_pVehicle->World()->Agents()) * m_dWeightAlignment;
 
-			if (!m_vSteeringForce.isZero())
-			{
-				m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
 
-				return m_vSteeringForce;
-			}
+		if (On(cohesion))
+		{
+			force = Cohesion(m_pVehicle->World()->Agents()) * m_dWeightCohesion;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 		}
 	}
+
 	else
 	{
-		if (On(allignment) && RandFloat() < Prm.prAlignment)
+
+		if (On(separation))
 		{
-			m_vSteeringForce += AlignmentPlus(m_pVehicle->World()->Agents()) *
-				m_dWeightAlignment / Prm.prAlignment;
+			force = SeparationPlus(m_pVehicle->World()->Agents()) * m_dWeightSeparation;
 
-			if (!m_vSteeringForce.isZero())
-			{
-				m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-				return m_vSteeringForce;
-			}
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 		}
 
-		if (On(cohesion) && RandFloat() < Prm.prCohesion)
+		if (On(allignment))
 		{
-			m_vSteeringForce += CohesionPlus(m_pVehicle->World()->Agents()) *
-				m_dWeightCohesion / Prm.prCohesion;
+			force = AlignmentPlus(m_pVehicle->World()->Agents()) * m_dWeightAlignment;
 
-			if (!m_vSteeringForce.isZero())
-			{
-				m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
 
-				return m_vSteeringForce;
-			}
+		if (On(cohesion))
+		{
+			force = CohesionPlus(m_pVehicle->World()->Agents()) * m_dWeightCohesion;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 		}
 	}
 
-	if (On(wander) && RandFloat() < Prm.prWander)
+	/* Find the spot to reach */
+	int vID = m_pVehicle->GetID();
+
+	/* Agent */
+	if (vID == 0)
 	{
-		m_vSteeringForce += Wander() * m_dWeightWander / Prm.prWander;
-
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-			return m_vSteeringForce;
-		}
+		AccumulateForce(m_vSteeringForce, Wander()*m_dWeightWander);
 	}
 
-	if (On(seek) && RandFloat() < Prm.prSeek)
+	/* Follower */
+	else if (vID > 0)
 	{
-		m_vSteeringForce += Seek(m_pVehicle->World()->Crosshair()) * m_dWeightSeek / Prm.prSeek;
+		/* Get the leader position */
+		Vehicle* leader = m_pVehicle->GetFollowedAgent();
+		Vector2D leaderPosition = leader->Pos();
 
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
+		/* Find our position in the V */
+		int agentSide = (vID % 2 * 2) - 1;
+		int agentPlace = (vID - 1) / 2 + 1;
 
-			return m_vSteeringForce;
-		}
-	}
+		Vector2D positionToReach = leaderPosition;
+		positionToReach -= 10 * leader->Heading() * agentPlace;
+		positionToReach += 10 * leader->Side() * agentPlace * agentSide;
 
-	if (On(arrive) && RandFloat() < Prm.prArrive)
-	{
-		m_vSteeringForce += Arrive(m_pVehicle->World()->Crosshair(), m_Deceleration) *
-			m_dWeightArrive / Prm.prArrive;
-
-		if (!m_vSteeringForce.isZero())
-		{
-			m_vSteeringForce.Truncate(m_pVehicle->MaxForce());
-
-			return m_vSteeringForce;
-		}
+		AccumulateForce(m_vSteeringForce, Arrive(positionToReach, m_Deceleration) * m_dWeightArrive);
 	}
 
 	return m_vSteeringForce;
 }
 
+/* Circle formation */
+Vector2D SteeringBehavior::CalculateDithered()
+{
+	Vector2D force;
 
+	if (On(wall_avoidance))
+	{
+		force = WallAvoidance(m_pVehicle->World()->Walls()) *
+			m_dWeightWallAvoidance;
+
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+	}
+
+	if (On(obstacle_avoidance))
+	{
+		force = ObstacleAvoidance(m_pVehicle->World()->Obstacles()) *
+			m_dWeightObstacleAvoidance;
+
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+	}
+
+	if (On(evade))
+	{
+		assert(m_pTargetAgent1 && "Evade target not assigned");
+
+		force = Evade(m_pTargetAgent1) * m_dWeightEvade;
+
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+	}
+
+
+	if (On(flee))
+	{
+		force = Flee(m_pVehicle->World()->Crosshair()) * m_dWeightFlee;
+
+		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+	}
+
+
+
+	//these next three can be combined for flocking behavior (wander is
+	//also a good behavior to add into this mix)
+	if (!isSpacePartitioningOn())
+	{
+		if (On(separation))
+		{
+			force = Separation(m_pVehicle->World()->Agents()) * m_dWeightSeparation;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
+
+		if (On(allignment))
+		{
+			force = Alignment(m_pVehicle->World()->Agents()) * m_dWeightAlignment;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
+
+		if (On(cohesion))
+		{
+			force = Cohesion(m_pVehicle->World()->Agents()) * m_dWeightCohesion;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
+	}
+
+	else
+	{
+
+		if (On(separation))
+		{
+			force = SeparationPlus(m_pVehicle->World()->Agents()) * m_dWeightSeparation;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
+
+		if (On(allignment))
+		{
+			force = AlignmentPlus(m_pVehicle->World()->Agents()) * m_dWeightAlignment;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
+
+		if (On(cohesion))
+		{
+			force = CohesionPlus(m_pVehicle->World()->Agents()) * m_dWeightCohesion;
+
+			if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
+		}
+	}
+
+	/* Find the spot to reach */
+	int vID = m_pVehicle->GetID();
+
+	/* Agent */
+	if (vID == 0)
+	{
+		AccumulateForce(m_vSteeringForce, Wander()*m_dWeightWander);
+	}
+
+	/* Follower */
+	else if (vID > 0)
+	{
+		/* Get the leader position */
+		Vehicle* leader = m_pVehicle->GetFollowedAgent();
+		Vector2D leaderPosition = leader->Pos();
+
+		/* Find our position in the circle */
+		Vector2D positionToReach = leaderPosition;
+
+		float angleFactor = (0.0174533 * 360.0 * vID) / (float)(Prm.NumAgents / Prm.NumLeaders);
+
+		positionToReach += 25 * leader->Heading() * sin(angleFactor);
+		positionToReach += 25 * leader->Side() * cos(angleFactor);
+
+		/* Seek this position */
+		AccumulateForce(m_vSteeringForce, Seek(positionToReach)*m_dWeightSeek);
+	}
+
+	return m_vSteeringForce;
+}
+
+/*****************************************************************************************************************************************/
+//																	MODIF fin
+/*****************************************************************************************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////// START OF BEHAVIORS
 
@@ -712,11 +588,11 @@ Vector2D SteeringBehavior::Flee(Vector2D TargetPos)
 	//only flee if the target is within 'panic distance'. Work in distance
 	//squared space.
 	/* const double PanicDistanceSq = 100.0f * 100.0;
-	 if (Vec2DDistanceSq(m_pVehicle->Pos(), target) > PanicDistanceSq)
-	 {
-	 return Vector2D(0,0);
-	 }
-	 */
+	if (Vec2DDistanceSq(m_pVehicle->Pos(), target) > PanicDistanceSq)
+	{
+	return Vector2D(0,0);
+	}
+	*/
 
 	Vector2D DesiredVelocity = Vec2DNormalize(m_pVehicle->Pos() - TargetPos)
 		* m_pVehicle->MaxSpeed();
@@ -1165,8 +1041,8 @@ Vector2D SteeringBehavior::Cohesion(const vector<Vehicle*> &neighbors)
 
 
 /* NOTE: the next three behaviors are the same as the above three, except
-		  that they use a cell-space partition to find the neighbors
-		  */
+that they use a cell-space partition to find the neighbors
+*/
 
 
 //---------------------------- Separation --------------------------------

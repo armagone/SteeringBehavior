@@ -28,7 +28,8 @@ class Vehicle : public MovingEntity
 
 private:
 
-	
+	/* Agent's ID */
+	int m_id = -1;
 
 	//the steering behavior class
 	SteeringBehavior*     m_pSteering;
@@ -120,6 +121,21 @@ public:
 	double      TimeElapsed()const{ return m_dTimeElapsed; }
 	int			getManualColor()const { return manual_color; }
 	void        setManualColor(int color) { manual_color = color; }
+
+
+	/*****************************************************************************************************************************************/
+	//																	MODIF début
+	/*****************************************************************************************************************************************/
+	/* Agent's ID setter */
+	int GetID(){ return m_id; };
+	void SetID(int id){ if (id >= 0)	m_id = id; };
+
+	/* Agent's ID setter */
+	Vehicle* GetFollowedAgent(){ return m_pAgentToFollow; };
+
+	/*****************************************************************************************************************************************/
+	//																	MODIF fin
+	/*****************************************************************************************************************************************/
 
 };
 
